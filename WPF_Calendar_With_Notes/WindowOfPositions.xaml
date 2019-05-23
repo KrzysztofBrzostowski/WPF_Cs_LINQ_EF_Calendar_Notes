@@ -1,0 +1,30 @@
+﻿<Window x:Class="WPF_Calendar_With_Notes.WindowOfPositions"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"                
+        Title="Nowa notatka" Height="411.313" Width="479">
+    <Grid>
+        <Label FontSize="14" FontFamily="Tahoma" Content="{Binding Date, Source={StaticResource Resources}}"  Height="30" HorizontalAlignment="Left" Margin="36,23,0,0" Name="label1" VerticalAlignment="Top" Width="66" />
+        <TextBlock FontSize="14" Height="27" HorizontalAlignment="Left" Margin="190,23,0,0" Name="tbDate" Text="" VerticalAlignment="Top" Width="170" />
+        <Label FontSize="14" FontFamily="Tahoma" Content="{Binding ChooseHour, Source={StaticResource Resources}}" Height="38" HorizontalAlignment="Left" Margin="36,70,0,0" Name="label2" VerticalAlignment="Top" Width="128" />
+        <Toolkit:TimePicker 
+            Value="{Binding Path=DateTimeVal,
+            UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"            
+            FontSize="14"  
+                      Name="timePicker1" 
+                      Margin="190,70,0,0" Height="34" Width="100" HorizontalAlignment="Left" 
+                      VerticalAlignment="Top" />
+        <Label FontSize="14" FontFamily="Tahoma" Content="{Binding ContentOfNote, Source={StaticResource Resources}}" Height="26" HorizontalAlignment="Left" Margin="34,128,0,0" Name="label3" VerticalAlignment="Top" Width="128" />
+        <TextBox FontSize="12" Text="{Binding Path=CurrentNote, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                 Height="80" HorizontalAlignment="Left" Margin="190,128,0,0" Name="tbNote" VerticalAlignment="Top" Width="252" AcceptsReturn="True" />
+
+        <Label FontSize="14" FontFamily="Tahoma" Content="{Binding User, Source={StaticResource Resources}}" Height="26" HorizontalAlignment="Left" Margin="34,230,0,0" Name="label4" VerticalAlignment="Top" Width="128" />
+        <TextBox FontSize="12" Text="{Binding Path=CurrentUser, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                 Height="60" HorizontalAlignment="Left" Margin="190,230,0,0" Name="tbUser" VerticalAlignment="Top" Width="252" AcceptsReturn="True" />
+
+        <Button Content="{Binding Save, Source={StaticResource Resources}}" Height="28" HorizontalAlignment="Left" Margin="36,323,0,0" Name="bSave" VerticalAlignment="Top" Width="170" Click="bSave_Click" />
+        <Button Content="{Binding Cancel, Source={StaticResource Resources}}" Height="28" HorizontalAlignment="Right" Margin="0,323,29,0" Name="bCancel" VerticalAlignment="Top" Width="170" Click="bCancel_Click" />
+    </Grid>
+</Window>

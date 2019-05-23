@@ -1,0 +1,136 @@
+﻿<Window x:Class="WPF_Calendar_With_Notes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Converters="clr-namespace:WPF_Calendar_With_Notes.Utilities.Converters" 
+        xmlns:VM="clr-namespace:WPF_Calendar_With_Notes.ViewModel"        
+        Title="{Binding MainWindowTitle,Source={StaticResource Resources}}"
+        Height="520" Width="800">
+
+    <Window.Resources>
+        <Converters:ConverterOfDate x:Key="StatusBarDateConverter" />
+        <Converters:ConverterOfHour x:Key="InstanceOfHour"/>
+        <Converters:ConverterOfMinute x:Key="InstanceOfMinute"/>
+        <Converters:ConverterOfNote x:Key="InstanceOfNote"/>
+        <Converters:DataGridDescriptionDateConverter x:Key="DataGridDescriptionDateConverter"/>
+        <Converters:NumberOfNotesConverter x:Key="NumberOfNotesConverter"/>
+    </Window.Resources>
+
+    <DockPanel>
+
+        <Menu Height="23" x:Name="menu1" DockPanel.Dock="Top">
+
+            <MenuItem Header="{Binding File,Source={StaticResource Resources}}">
+                <MenuItem Header="{Binding Exit,Source={StaticResource Resources}}" Click="bQuit_Click"/>
+            </MenuItem>
+
+            <MenuItem Header="{Binding Options, Source={StaticResource Resources}}">
+                <MenuItem Header="{Binding Language, Source={StaticResource Resources}}" >
+                    <MenuItem Header="EN" Command="{Binding LanguageChangeCommand}" CommandParameter="en-GB" />
+                    <MenuItem Header="PL" Command="{Binding LanguageChangeCommand}" CommandParameter="pl-PL"  />
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="{Binding Help, Source={StaticResource Resources}}">
+                <MenuItem Header="{Binding About, Source={StaticResource Resources}}" Command="{Binding HelpCommand}" />
+            </MenuItem>
+
+        </Menu>
+
+
+        <StatusBar x:Name="statusBar1" DockPanel.Dock="Bottom">
+
+            <StatusBarItem>
+                <TextBlock Width="235" FontSize="12" Text="{Binding ElementName=MainCalendar, 
+                    Path=SelectedDate, 
+                    Converter={StaticResource StatusBarDateConverter}}" x:Name="DateTextBlock" />
+            </StatusBarItem>
+
+            <Separator Width="2"/>
+
+            <StatusBarItem>
+                <TextBlock Width="145" x:Name="textBlock1" Text="{Binding Path=Engine.NumberOfPositionForDataGrid, Converter={StaticResource NumberOfNotesConverter}}"/>
+            </StatusBarItem>
+
+            <Separator Width="2"/>
+
+            <StatusBarItem>
+                <TextBlock Width="145" x:Name="tbDataBaseState" Text="{Binding Path=Engine.DataBaseState}"/>
+            </StatusBarItem>
+
+            <Separator Width="2"/>
+            
+            <StatusBarItem>
+                <TextBlock Text="{Binding Path=Engine.LanguageName}" x:Name="textBlock2" />
+            </StatusBarItem>
+
+        </StatusBar>
+
+
+        <Grid>
+            <Calendar SelectedDate="{Binding Path=Engine.Selected_Date, Mode=TwoWay}" 
+                      SelectionMode="MultipleRange" 
+                      IsTodayHighlighted="True" Height="165" Width="180" Margin="24,55,0,0" 
+                      Name="MainCalendar" VerticalAlignment="Top"
+                      SelectedDatesChanged="MainCalendar_SelectedDatesChanged"
+                      HorizontalAlignment="Left" />
+
+            <Label Content="{Binding ChoosingDay, Source={StaticResource Resources}}" Height="30" Width="110" FontFamily="Tahoma" FontSize="14" HorizontalAlignment="Left" 
+               Margin="71,24,0,0" Name="label1" VerticalAlignment="Top"/>
+
+            <Label Content="{Binding ElementName=MainCalendar, 
+                    Path=SelectedDate, Converter={StaticResource DataGridDescriptionDateConverter} }" 
+                   
+                   
+                   Height="30" Width="307" FontFamily="Tahoma" 
+                   FontSize="14" HorizontalAlignment="Left" Margin="368,24,0,0" Name="lDataGridDescription" VerticalAlignment="Top"/>
+
+            <DataGrid
+                PreviewKeyDown="dataGrid1_PreviewKeyDown" RowEditEnding="dataGrid1_RowEditEnding" 
+                      IsReadOnly="False" ItemsSource="{Binding Path=Engine.Positions}" AutoGenerateColumns="False" 
+                      HorizontalAlignment="Left" SelectedCellsChanged="dataGrid1_SelectedCellsChanged"
+                  Height="330"  Margin="230,55,0,0" Width="520" FontSize="12" Name="dataGrid1" VerticalAlignment="Top"  >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{Binding Hour, Source={StaticResource Resources}}"                                         
+                                        Binding="{Binding Path=CurrentHour, 
+                        UpdateSourceTrigger=PropertyChanged,
+                        Converter={StaticResource InstanceOfHour},
+                        ValidatesOnDataErrors=True}" Width="38" />
+
+                    <DataGridTextColumn Header="{Binding Minute, Source={StaticResource Resources}}"                                         
+                                        Binding="{Binding Path=CurrentMinute, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Converter={StaticResource InstanceOfMinute},
+                        ValidatesOnDataErrors=True}" Width="35" />
+
+                    <DataGridTextColumn Header="{Binding Note, Source={StaticResource Resources}}"                                         
+                                        Binding="{Binding Path=CurrentNote, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Converter={StaticResource InstanceOfNote},                        
+                        ValidatesOnDataErrors=True}" MinWidth="340" />
+
+                    <DataGridTextColumn Header="{Binding User, Source={StaticResource Resources}}"                                         
+                                        Binding="{Binding Path=CurrentUser, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Converter={StaticResource InstanceOfNote},                        
+                        ValidatesOnDataErrors=True}" MinWidth="90" />
+
+
+
+                </DataGrid.Columns>
+            </DataGrid>
+
+
+            <Button Content="{Binding EditSelected, Source={StaticResource Resources}}" HorizontalAlignment="Left" Name="bEditSelected" VerticalAlignment="Top" FontSize="12"
+                Height="24"  Margin="422,390,0,0"  Width="130" Command="{Binding EditSelectedNoteCommand}" />
+
+            <Button Content="{Binding RemoveSelectedNote, Source={StaticResource Resources}}" HorizontalAlignment="Left" Name="bDeleteSelectedNote" VerticalAlignment="Top" FontSize="12"
+                Height="24"  Margin="620,390,0,0"  Width="130" Command="{Binding DeleteSelectedNoteCommand}" />
+
+            <Button Content="{Binding AddNewNote, Source={StaticResource Resources}}" HorizontalAlignment="Left" Name="bAddNote" VerticalAlignment="Top" FontSize="12" Height="24" Margin="230,390,0,0" Width="130" Command="{Binding NewNoteCommand}" />
+
+        </Grid>
+
+    </DockPanel>
+
+
+</Window>

@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Utilities="clr-namespace:WPF_Calendar_With_Notes.Utilities">
+    <ObjectDataProvider
+        x:Key="Resources"
+     ObjectType="{x:Type Utilities:i18nManager}"
+        MethodName="GetResourceManager" />
+
+</ResourceDictionary>
